@@ -47,7 +47,7 @@
 #define MD5_INCLUDED
 
 #include <ruby.h>
-#include <sys/types.h>
+#include <stdint.h>
 
 /*
  * This code has some adaptations for the Ghostscript environment, but it
@@ -55,8 +55,6 @@
  * 32-bit ints.  Specifically, it assumes that if the following are
  * defined, they have the same meaning as in Ghostscript: P1, P2, P3.
  */
-typedef unsigned int uint32_t;
-typedef unsigned char uint8_t;
 
 /* Define the state of the MD5 Algorithm. */
 typedef struct md5_state_s {
