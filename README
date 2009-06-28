@@ -13,7 +13,4 @@ It has exactly the same interface as Digest::MD5, but adds 2 additional function
 Here's how it works, the MD5_CTX structure can be serialized to a string.  Once in string form it can be stored using any method you like...
 file system, database, etc...
 
-I choose to use a non indianness dependent string format, so it is possibly slightly more processor intensive to read and write, but more compatable
-for maybe use in parallel computations.
-
 see test/test.rb for example usage
