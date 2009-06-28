@@ -36,5 +36,7 @@ class TestPartial < Test::Unit::TestCase
       directly = Digest::MD5.hexdigest(File.read(__FILE__))
       assert_equal directly, from_partial
     end
+  ensure
+    File.unlink("partial") if File.exist?("partial")
   end
 end
