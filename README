@@ -1,0 +1,19 @@
+Make it possible to store a partial md5 calculation for later use. 
+Have you ever received a very large file and wanted to calculate a checksum for the file to verify it's correctness?
+You probably noticed it took a very long time to compute.  What if you could calculate the checksum as you received the file.
+Okay you can do this with existing Digest::MD5, but what if you received a little bit of the file and stopped.  The process receiving
+or server receiving the file stopped.  Then sometime later you are able to resume receiving the file. You don't want to have to start
+recalculating the file from the beginning again, because lets say you already received 75% of the file. If it took a long time to compute
+the MD5 for 100% of the file it will still take some time for 75% of the file.  MD5Partial allows you to save the computation to disk, or any
+other storage so that you can continue from where ever you left off.
+
+It has exactly the same interface as Digest::MD5, but adds 2 additional functions, save and restore.
+
+
+Here's how it works, the MD5_CTX structure can be serialized to a string.  Once in string form it can be stored using any method you like...
+file system, database, etc...
+
+I choose to use a non indianness dependent string format, so it is possibly slightly more processor intensive to read and write, but more compatable
+for maybe use in parallel computations.
+
+see test/test.rb for example usage
