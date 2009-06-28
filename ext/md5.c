@@ -395,20 +395,18 @@ VALUE rb_MD5_Save(VALUE self) {
 
   memcpy(output, ctx, sizeof(MD5_CTX));
  
-  str = rb_str_new(output, sizeof(MD5_CTX));
-  return str;
+  return rb_str_new(output, sizeof(MD5_CTX));
 }
 
 /* restore the current state from a rb_str */
 VALUE rb_MD5_Restore(VALUE self, VALUE str) {
   MD5_CTX *ctx;
-  char *str_ptr = RSTRING_PTR(str);
 
   Data_Get_Struct(self, MD5_CTX, ctx);
 
-  memcpy(ctx, str_ptr, sizeof(MD5_CTX));
+  memcpy(ctx, RSTRING_PTR(str), sizeof(MD5_CTX));
 
-  return Qfalse;
+  return self;
 }
 
 /*
