@@ -388,61 +388,25 @@ static const rb_digest_metadata_t md5 = {
  */ 
 VALUE rb_MD5_Save(VALUE self) {
   MD5_CTX *ctx;
-  unsigned int offset;
-  const long buffer_size = sizeof(MD5_CTX) *2;
-  char output[buffer_size];
+  char output[sizeof(MD5_CTX)];
   VALUE str;
 
   Data_Get_Struct(self, MD5_CTX, ctx);
 
-  snprintf(output,buffer_size, "%lu,%lu,%lu,%lu,%lu,%lu,:",
-                                (unsigned long)ctx->count[0], (unsigned long)ctx->count[1],
-                                (unsigned long)ctx->state[0], (unsigned long)ctx->state[1], (unsigned long)ctx->state[2], (unsigned long)ctx->state[3]);
-  offset = strlen(output);
-  memcpy(output+offset, ctx->buffer, 64);
-//  printf("save: %s\n", output);
-  
-  str = rb_str_new2(output);
+  memcpy(output, ctx, sizeof(MD5_CTX));
+ 
+  str = rb_str_new(output, sizeof(MD5_CTX));
   return str;
 }
+
 /* restore the current state from a rb_str */
 VALUE rb_MD5_Restore(VALUE self, VALUE str) {
   MD5_CTX *ctx;
-  Data_Get_Struct(self, MD5_CTX, ctx);
   char *str_ptr = RSTRING_PTR(str);
-  char *end_ptr = strchr(str_ptr, ':');
-  char *next_ptr = str_ptr;
-  int count = 0;
-  int pass = 0;
 
-//  printf("restore:\n\t");
-  do {
-    str_ptr = next_ptr;
-    next_ptr = strchr(next_ptr,',');
- //   printf("\nnext_ptr: '%c', str_ptr: '%c', count: '%d'\n", *next_ptr, *str_ptr, count);
-    if( !next_ptr ) { rb_raise(rb_eRuntimeError, "Invalid context format"); }
-    *next_ptr = '\0'; /* terminate */
+  Data_Get_Struct(self, MD5_CTX, ctx);
 
-    if( pass == 1 ) {
- //     printf("state[%d] = %ld, ", count, atol(str_ptr));
-      ctx->state[count++] = atol(str_ptr);
-    }
-    else {
- //     printf("count[%d] = %ld, ", count, atol(str_ptr));
-      ctx->count[count++] = atol(str_ptr);
-    }
-    ++next_ptr; /* advance */
-
-    if( count == 2 && pass != 1 ) { /* control, switch to state from count */
-      pass = 1;
-      count = 0;
-    }
-
-  } while( next_ptr && (next_ptr+1) < end_ptr && count < 4);
-  // reset ctx->buffer
-  memset(ctx->buffer, 0, sizeof(ctx->buffer));
-  memcpy(ctx->buffer, end_ptr+1, 64);
-//  printf("buffer:%s\n", ctx->buffer);
+  memcpy(ctx, str_ptr, sizeof(MD5_CTX));
 
   return Qfalse;
 }
