@@ -389,7 +389,6 @@ static const rb_digest_metadata_t md5 = {
 VALUE rb_MD5_Save(VALUE self) {
   MD5_CTX *ctx;
   char output[sizeof(MD5_CTX)];
-  VALUE str;
 
   Data_Get_Struct(self, MD5_CTX, ctx);
 
