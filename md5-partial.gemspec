@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name    = "md5-partial"
   s.authors = ["Todd A. Fisher"]
-  s.version = '0.0.1'
+  s.version = '0.0.2'
   s.date    = '2009-06-28'
   s.description = %q{Calculate an MD5 digest in parts, saving and restoring the calculation}
   s.email   = 'todd.fisher@gmail.com'
