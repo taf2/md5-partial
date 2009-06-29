@@ -5,7 +5,8 @@ require 'test/unit'
 class TestPartial < Test::Unit::TestCase
   def test_chunked_partials
     files = Dir['../ext/*.*'].each do|file|
-      puts "test #{file}"
+      print "test #{file} "
+      from_partial = ""
       # calculate a using a range of chunk sizes
       100.times do|i|
         buf_size = 10*(i+1)
@@ -38,6 +39,7 @@ class TestPartial < Test::Unit::TestCase
         directly = Digest::MD5.hexdigest(File.read(file))
         assert_equal directly, from_partial
       end
+      puts from_partial
     end
   ensure
     File.unlink("partial") if File.exist?("partial")
